@@ -41,7 +41,13 @@
   <script src="js/db.js"></script>
   <script>
     const params = new URLSearchParams(location.search);
-    const loteId = params.get('lote');
+    // Modo demo: ?seed=1 siembra datos y consolida para tener un lote de ejemplo
+    if (params.get('seed') && !DB.consolidaciones().length) {
+      DB.seedDemo();
+      DB.sectores().forEach(s => DB.consolidar(s));
+    }
+    let loteId = params.get('lote');
+    if (!loteId && DB.consolidaciones().length) loteId = DB.consolidaciones()[0].id;
     const cont = document.getElementById('contenido');
     const lote = DB.loteById(loteId);
 

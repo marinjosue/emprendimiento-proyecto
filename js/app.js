@@ -323,3 +323,29 @@ document.getElementById('btnReset').addEventListener('click', () => {
 /* ---------- Arranque ---------- */
 Bot.iniciar();
 renderLogistica();
+
+/* ================================================================
+   MODO DEMO por URL — para capturas y presentaciones.
+   Ej:  index.html?seed=1&tab=logistica
+        index.html?seed=1&consolidar=Machachi&tab=mercado
+        index.html?tab=bot&botplay=precios
+   ================================================================ */
+(function demoDriver() {
+  const q = new URLSearchParams(location.search);
+  if (![...q.keys()].length) return;
+
+  if (q.get('seed')) DB.seedDemo();
+  const cons = q.get('consolidar');
+  if (cons) cons.split(',').forEach(s => DB.consolidar(s.trim()));
+  if (q.get('vender')) DB.consolidaciones().forEach(c => DB.venderLote(c.id));
+
+  Bot.iniciar(); renderLogistica(); renderMercado();
+
+  const tab = q.get('tab');
+  if (tab) { const b = document.querySelector(`.tab[data-panel="${tab}"]`); if (b) b.click(); }
+
+  if (q.get('botplay') === 'precios') {
+    const e = document.getElementById('entrada');
+    setTimeout(() => { e.value = '1'; document.getElementById('enviar').click(); }, 500);
+  }
+})();
