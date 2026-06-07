@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgroConecta — Prototipo</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <span class="logo">🌱</span>
+    <h1>AgroConecta</h1>
+    <span class="lema">"Vendemos cosechas sin intermediarios mediante WhatsApp, logística compartida y pago en menos de 24 horas."</span>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab activo" data-panel="bot">
+      🤖 Módulo 1 — Bot WhatsApp
+      <small>Productor: precios + registro</small>
+    </button>
+    <button class="tab" data-panel="logistica">
+      🚛 Módulo 2 — Consolidación
+      <small>Flete compartido por sector</small>
+    </button>
+    <button class="tab" data-panel="mercado">
+      🛒 Módulo 3 — Mercado + QR
+      <small>Consumidor "Keyla" / trazabilidad</small>
+    </button>
+  </nav>
+
+  <!-- ===================== MÓDULO 1: BOT ===================== -->
+  <section id="bot" class="panel activo">
+    <h2>Bot de WhatsApp — Lado Productor</h2>
+    <p class="sub">Simula la conversación del agricultor con el bot corporativo. Resuelve el <b>Dolor 1: asimetría de precios</b>. Escribe comandos simples o usa los botones rápidos.</p>
+
+    <div class="telefono">
+      <div class="wa-header">
+        <div class="avatar">🌱</div>
+        <div class="info">
+          <b>AgroConecta</b>
+          <span>en línea • bot oficial</span>
+        </div>
+      </div>
+      <div class="wa-chat" id="chat"></div>
+      <div class="wa-input">
+        <input type="text" id="entrada" placeholder="Escribe un mensaje…" autocomplete="off">
+        <button id="enviar" title="Enviar">➤</button>
+      </div>
+    </div>
+
+    <div class="chips" id="chips">
+      <span class="chip" data-msg="Hola">👋 Hola</span>
+      <span class="chip" data-msg="1">1 · Consultar precios</span>
+      <span class="chip" data-msg="2">2 · Registrar cosecha</span>
+      <span class="chip" data-msg="Tengo 25 quintales de cebolla">Ej: "Tengo 25 quintales de cebolla"</span>
+    </div>
+  </section>
+
+  <!-- ===================== MÓDULO 2: LOGÍSTICA ===================== -->
+  <section id="logistica" class="panel">
+    <h2>Motor de Consolidación Logística</h2>
+    <p class="sub">Agrupa las cosechas registradas por sector. Resuelve el <b>Dolor 2: aislamiento logístico</b>. Al alcanzar la masa crítica de <b id="masaTxt">80</b> quintales se habilita el flete compartido.</p>
+    <div class="kpis" id="kpisLog"></div>
+    <div class="grid" id="gridSectores"></div>
+  </section>
+
+  <!-- ===================== MÓDULO 3: MERCADO ===================== -->
+  <section id="mercado" class="panel">
+    <h2>Mercado y Trazabilidad — Consumidor "Keyla"</h2>
+    <p class="sub">Canastas trazables disponibles en Quito. Resuelve el <b>Dolor 3: pérdida del margen premium</b>. Cada lote lleva un QR que certifica su origen (BPA / MAG).</p>
+    <div class="grid" id="gridMercado"></div>
+  </section>
+
+  <footer class="pie">
+    <div class="toolbar" style="justify-content:center">
+      <button class="btn sec" id="btnSeed" style="max-width:240px">🎬 Cargar datos de demo</button>
+      <button class="btn sec" id="btnReset" style="max-width:240px">🗑️ Reiniciar prototipo</button>
+    </div>
+    AgroConecta · Prototipo académico · Reto Innova-ESPE 2026 · Equipo 01<br>
+    <small>Datos guardados localmente (localStorage). Stack objetivo: WhatsApp Business API + Firebase + PWA.</small>
+  </footer>
+
+  <script src="js/db.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

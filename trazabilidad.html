@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trazabilidad — AgroConecta</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .traza-wrap { max-width: 480px; margin: 0 auto; padding: 22px; }
+    .traza-card { background:#fff; border-radius:18px; box-shadow:var(--sombra); overflow:hidden; }
+    .traza-head { background:linear-gradient(135deg,var(--verde),var(--verde-osc)); color:#fff; padding:26px 20px; text-align:center; }
+    .traza-head .check { font-size:46px; }
+    .traza-head h2 { color:#fff; margin:6px 0 2px; }
+    .traza-body { padding:22px; }
+    .fila { display:flex; gap:12px; padding:12px 0; border-bottom:1px solid #eee; align-items:center; }
+    .fila .ico { font-size:22px; width:30px; text-align:center; }
+    .fila .t { font-size:12px; color:var(--gris); }
+    .fila .v { font-size:15px; font-weight:600; }
+    .cert { background:#e8f5e9; border:1px solid var(--verde-claro); border-radius:10px; padding:14px; margin-top:16px; text-align:center; }
+    .cert b { color:var(--verde-osc); }
+    .pilares { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px; }
+    .pilar { background:#fff; border:1px solid #d8eede; border-radius:8px; padding:8px; font-size:12px; text-align:left; }
+    .num-cert { font-family:monospace; font-size:13px; background:#fff; padding:4px 8px; border-radius:6px; display:inline-block; margin-top:6px; }
+    .productor { display:flex; align-items:center; gap:14px; background:var(--gris-claro); padding:14px; border-radius:12px; margin-bottom:8px; }
+    .productor .cara { font-size:40px; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <span class="logo">🌱</span>
+    <h1>AgroConecta</h1>
+    <span class="lema">Trazabilidad verificada</span>
+  </header>
+
+  <div class="traza-wrap" id="contenido"></div>
+
+  <footer class="pie">
+    <a href="index.html" style="color:var(--verde)">← Volver al prototipo</a>
+  </footer>
+
+  <script src="js/db.js"></script>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const loteId = params.get('lote');
+    const cont = document.getElementById('contenido');
+    const lote = DB.loteById(loteId);
+
+    if (!lote) {
+      cont.innerHTML = `<div class="traza-card"><div class="traza-body vacio">
+        ⚠️ No se encontró el lote <b>${loteId || '(sin código)'}</b>.<br><br>
+        Genera primero un flete compartido en el prototipo para crear lotes trazables.
+      </div></div>`;
+    } else {
+      const fecha = new Date(lote.fecha).toLocaleDateString('es-EC', { day:'2-digit', month:'long', year:'numeric' });
+      const caras = ['👨‍🌾','👩‍🌾','🧑‍🌾'];
+      const prods = lote.productores.map((p,i) =>
+        `<div class="productor"><span class="cara">${caras[i % caras.length]}</span>
+          <div><div class="v">${p}</div><div class="t">Productor asociado · ${lote.sector}</div></div>
+        </div>`).join('');
+      const acopio = lote.acopio || 'Centro de acopio AgroConecta';
+      const certBPA = `
+        <div class="cert">
+          🏅 <b>Certificado de Buenas Prácticas Agrícolas (BPA)</b><br>
+          Emitido por <b>AGROCALIDAD</b> (Agencia de Regulación y Control Fito y Zoosanitario) · MAG.<br>
+          <span class="num-cert">${DB.certificadoBPA(lote.id)}</span><br>
+          <small>Vigencia: 3 años · auditoría oficial en finca · producto sin químicos perjudiciales.</small>
+          <div class="pilares">
+            <div class="pilar">🥗 <b>Inocuidad</b> alimentaria</div>
+            <div class="pilar">👷 <b>Seguridad</b> laboral</div>
+            <div class="pilar">🌎 <b>Medio ambiente</b></div>
+            <div class="pilar">🐝 <b>Bienestar</b> y trazabilidad</div>
+          </div>
+        </div>`;
+      const sinCert = '<div class="cert">🌱 Producto de origen verificado · trazabilidad comunitaria AgroConecta (sin certificación BPA declarada).</div>';
+
+      cont.innerHTML = `
+        <div class="traza-card">
+          <div class="traza-head">
+            <div class="check">✅</div>
+            <h2>Producto verificado</h2>
+            <div>Lote ${lote.id}</div>
+          </div>
+          <div class="traza-body">
+            <div class="fila"><span class="ico">🌽</span><div><div class="t">Productos</div><div class="v">${lote.productos.join(', ')}</div></div></div>
+            <div class="fila"><span class="ico">⚖️</span><div><div class="t">Volumen del lote</div><div class="v">${lote.totalQuintales} quintales</div></div></div>
+            <div class="fila"><span class="ico">📍</span><div><div class="t">Origen</div><div class="v">${lote.sector}, Pichincha — Ecuador</div></div></div>
+            <div class="fila"><span class="ico">🏬</span><div><div class="t">Punto de acopio</div><div class="v">${acopio}</div></div></div>
+            <div class="fila"><span class="ico">📅</span><div><div class="t">Fecha de recolección</div><div class="v">${fecha}</div></div></div>
+
+            <h3 style="margin:18px 0 8px">👥 Productores de origen</h3>
+            ${prods}
+
+            ${lote.bpa ? certBPA : sinCert}
+
+            <p style="font-size:12px;color:var(--gris);margin-top:16px;text-align:center">
+              Al comprar este lote pagas un precio justo directamente al productor, sin intermediarios.
+              El productor recibe su pago en menos de 24 horas.
+            </p>
+          </div>
+        </div>`;
+    }
+  </script>
+</body>
+</html>
