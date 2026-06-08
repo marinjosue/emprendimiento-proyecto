@@ -264,3 +264,80 @@ footer.pie {
   color: var(--gris);
   font-size: 12px;
 }
+
+/* ================================================================
+   RESPONSIVE — tablet y móvil
+   ================================================================ */
+
+/* ----- Tablet (≤ 768px) ----- */
+@media (max-width: 768px) {
+  .topbar { padding: 12px 16px; }
+  .topbar h1 { font-size: 18px; }
+  .topbar .lema { max-width: 240px; font-size: 11px; }
+
+  .panel { padding: 18px 16px; }
+  .tab { min-width: 140px; font-size: 13px; }
+
+  .grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+}
+
+/* ----- Móvil (≤ 560px) ----- */
+@media (max-width: 560px) {
+  /* Encabezado apilado: el lema baja a una línea propia */
+  .topbar {
+    flex-wrap: wrap;
+    padding: 10px 14px;
+    gap: 8px;
+  }
+  .topbar h1 { font-size: 18px; }
+  .topbar .lema {
+    margin-left: 0;
+    text-align: left;
+    max-width: 100%;
+    flex-basis: 100%;
+    font-size: 11px;
+    line-height: 1.35;
+  }
+
+  /* Las pestañas dejan de estar fijas para no pelear con el header variable */
+  .tabs {
+    position: static;
+    top: auto;
+  }
+  .tab {
+    min-width: 130px;
+    padding: 12px 8px;
+    font-size: 12px;
+  }
+  .tab small { font-size: 10px; }
+
+  .panel { padding: 16px 12px; }
+  .panel h2 { font-size: 18px; }
+  .panel .sub { font-size: 13px; margin-bottom: 16px; }
+
+  /* El "teléfono" ocupa el ancho disponible */
+  .telefono {
+    max-width: 100%;
+    border-width: 6px;
+    border-radius: 24px;
+  }
+  .wa-chat { height: 60vh; min-height: 320px; }
+  .msg { max-width: 88%; }
+
+  .chips { max-width: 100%; }
+
+  /* Una sola columna en las tarjetas */
+  .grid { grid-template-columns: 1fr; gap: 14px; }
+  .kpis { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .kpi b { font-size: 22px; }
+
+  /* Botonera del pie en columna y a ancho completo */
+  .toolbar { flex-direction: column; align-items: stretch; }
+  .toolbar button { width: 100%; max-width: 100% !important; }
+}
+
+/* ----- Móvil pequeño (≤ 380px) ----- */
+@media (max-width: 380px) {
+  .kpis { grid-template-columns: 1fr; }
+  .topbar h1 { font-size: 16px; }
+}

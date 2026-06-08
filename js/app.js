@@ -321,7 +321,7 @@ document.getElementById('btnReset').addEventListener('click', () => {
 });
 
 /* ---------- Arranque ---------- */
-Bot.iniciar();
+if (!location.search) Bot.iniciar();   // en modo demo, demoDriver hace la init
 renderLogistica();
 
 /* ================================================================
